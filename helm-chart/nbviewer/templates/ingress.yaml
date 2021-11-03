@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  {{- if .Values.ingress.annotations }}
+  annotations:
+    {{- range $key, $value := .Values.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
+  labels:
+    {{- include "nbviewer.labels" . | nindent 4 }}
+  name: name: {{ template "nbviewer.fullname" . }}
+spec:
+  rules:
+    {{- range $host := .Values.ingress.hosts }}
+    - host: {{ $host | quote }}
+      http:
+        paths:
+          - backend:
+              serviceName: {{ template "nbviewer.fullname" . }}
+              servicePort: 80
+            path: /
+    {{- end }}
