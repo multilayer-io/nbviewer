@@ -61,3 +61,8 @@ statuspage:
   apiKey: ""
   pageId: ""
   metricId: ""
+
+ingress:
+  enabled: false
+  annotations: {}
+  hosts: []

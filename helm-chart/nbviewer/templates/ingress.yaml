@@ -1,15 +1,17 @@
+{{- if .Values.ingress.enabled -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
+  name: {{ template "nbviewer.fullname" . }}
+  labels:
+    component: nbviewer
+    {{- include "nbviewer.labels" . | nindent 4 }}
   {{- if .Values.ingress.annotations }}
   annotations:
     {{- range $key, $value := .Values.ingress.annotations }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
   {{- end }}
-  labels:
-    {{- include "nbviewer.labels" . | nindent 4 }}
-  name: {{ template "nbviewer.fullname" . }}
 spec:
   rules:
     {{- range $host := .Values.ingress.hosts }}
@@ -21,3 +23,4 @@ spec:
               servicePort: 80
             path: /
     {{- end }}
+{{- end }}
