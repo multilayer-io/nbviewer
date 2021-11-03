@@ -1,8 +1,9 @@
 {{- if .Values.ingress.enabled -}}
-apiVersion: extensions/v1beta1
+{{- $fullName := include "nbviewer.fullname" . -}}
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ template "nbviewer.fullname" . }}
+  name: {{ $fullName }}
   labels:
     component: nbviewer
     {{- include "nbviewer.labels" . | nindent 4 }}
@@ -19,8 +20,11 @@ spec:
       http:
         paths:
           - backend:
-              serviceName: {{ template "nbviewer.fullname" . }}
-              servicePort: 80
+              service:
+                name: {{ $fullName }}
+                port: 
+                  number: 80
             path: /
+            pathType: Prefix
     {{- end }}
 {{- end }}
